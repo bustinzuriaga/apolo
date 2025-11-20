@@ -1,0 +1,104 @@
+#titol_principal {
+    color: darkblue;
+}
+
+#imatge_botiga {
+    width: 50%;
+    border: darkblue solid 10px;
+    border-radius: 50%;
+}
+
+a {
+    color: blue;
+}
+a:hover {
+    color: rgb(255, 0, 102);
+}
+
+header {
+    text-align: center;
+
+    width: 80%;
+    margin: 0 auto;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#menu {
+    position: sticky;
+    top: 0;
+
+    background-color: rgb(209, 206, 255);
+    color: blue;
+    border: 2px solid rgb(37, 169, 240);
+
+    padding: 20px;
+    margin: 20px;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+ul, li {
+    display: inline-block;
+}
+
+body {
+    background-color: cornflowerblue;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+div#productes {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.producte {
+    background-color: rgb(46, 84, 146);
+    color: white;
+
+    border: 5px inset rgb(13, 63, 143);
+    border-radius: 5px;
+    margin: 15px;
+    padding: 20px;
+
+    box-shadow: 5px 5px 10px black;
+}
+
+div#serveis {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    text-align: center;
+}
+
+.servei {
+    background-color: rgb(46, 84, 146);
+    color: white;
+
+    border: 5px inset rgb(13, 63, 143);
+    border-radius: 5px;
+
+    margin: 20px;
+    padding: 20px;
+
+    display: inline-block;
+    box-shadow: 5px 5px 10px black;
+}
+
+footer {
+    text-align: center;
+    border: 5px ridge darkblue;
+    background-color: rgb(66, 125, 234);
+    padding-bottom: 25px;
+    margin-top: 30px;
+}
