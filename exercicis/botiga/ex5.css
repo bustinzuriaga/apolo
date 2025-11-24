@@ -12,7 +12,7 @@ a {
     color: blue;
 }
 a:hover {
-    color: rgb(255, 0, 102);
+    color: red;
 }
 
 header {
