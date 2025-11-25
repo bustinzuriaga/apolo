@@ -1,11 +1,28 @@
 #titol_principal {
     color: darkblue;
 }
-
+@media screen and (min-width: 1000px) {
 #imatge_botiga {
-    width: 50%;
+    width: 40%;
     border: darkblue solid 10px;
     border-radius: 50%;
+}
+}
+
+@media screen and (min-width:601px) and (max-width: 999px) {
+    #imatge_botiga {
+    width: 50%;
+    border: darkblue solid 5px;
+    border-radius: 50%;
+}
+}
+
+@media screen and (min-width:1px) and (max-width: 600px) {
+#imatge_botiga {
+        width: 75%;
+        border: darkblue solid 5px;
+        border-radius: 75%;
+}
 }
 
 a {
@@ -48,9 +65,19 @@ ul, li {
     display: inline-block;
 }
 
+@media screen and (min-width: 1000px) {
+div.contingut {
+ 	width: 70%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+}
+
 body {
     background-color: cornflowerblue;
-    display: flex;
+    
     flex-direction: column;
     text-align: center;
     justify-content: center;
@@ -72,7 +99,7 @@ div#productes {
     margin: 15px;
     padding: 20px;
 
-    box-shadow: 5px 5px 10px black;
+    box-shadow: 10px 10px 10px black;
 }
 
 div#serveis {
@@ -92,7 +119,7 @@ div#serveis {
     padding: 20px;
 
     display: inline-block;
-    box-shadow: 5px 5px 10px black;
+    box-shadow: 10px 10px 10px black;
 }
 
 footer {
