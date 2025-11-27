@@ -1,0 +1,9 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+#integrants {
+    display: flex;
+    flex-direction: row;
+}
