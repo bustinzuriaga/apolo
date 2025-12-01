@@ -7,3 +7,15 @@ body {
     display: flex;
     flex-direction: row;
 }
+
+img#grup {
+    width: 50%;
+}
+
+a {
+    color: red;
+}
+
+td, th {
+    padding: 5px 20px;
+}
