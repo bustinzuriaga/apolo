@@ -3,7 +3,7 @@ body {
     /*background-color: black;*/
     color: white;
     font-family: monospace;
-    font-size: 100%;
+    font-size: 20px;
 }
 
 header {
@@ -12,7 +12,9 @@ header {
     align-items: center;
     text-align: center;
     padding: 20px;
-    color: darkred;
+    color: red;
+    font-size: 30px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 img#grup {
@@ -39,6 +41,34 @@ audio {
     margin-right: auto;
 }
 
+img {
+    width: 450px;
+    border-radius: 25px;
+    border: darkred solid 5px;
+}
+
+#imatges {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    /* 
+    buscant com deixar espai entre elements dins de un div he trobat "gap"
+    l'utilitzo per que deixi un espai entre els div fills i mai es sobreposin
+    */
+    justify-items: center;
+    margin: 30px;
+}
+
+#imatges div {
+    text-align: center
+}
+
+#imatges img {
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 15px 15px 20px black;
+}
+
 #integrants {
     display: flex;
     flex-direction: row;
@@ -59,11 +89,12 @@ table {
     margin-right: auto;
     border-collapse: collapse;
     text-align: center;
+    border: 5px double white;
 }
 
 td, th {
     padding: 5px 10px;
-    border: 1px solid white;
+    border: 5px double white;
 }
 
 #videos {
@@ -81,6 +112,9 @@ td, th {
     width: 300px;
     max-width: 90%;
     height: auto;
+    border: darkred solid 5px;
+    border-radius: 15px;
+    box-shadow: 15px 15px 20px black;
 }
 
 iframe {
@@ -92,6 +126,7 @@ iframe {
     margin-bottom: 20px;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 15px;
 }
 
 footer {
