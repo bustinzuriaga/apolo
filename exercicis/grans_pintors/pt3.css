@@ -3,16 +3,7 @@ body {
     background-color: #FFD93D;
 }
 
-header {
-    background-image: url(https://historia-arte.com/_/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpbSI6WyJcL2FydHdvcmtcL2ltYWdlRmlsZVwvbWlyYzNiM19jYXJuYXZhbC5qcGciLCJyZXNpemUsNjAwLDYwMCJdfQ.IEWdv6oKHzF8xqVndIMtgikg4syoDGoXd8heKkz1qXU.jpg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: 30px;
-    color: white;
-}
-
-footer {
+header, footer {
     background-image: url(https://historia-arte.com/_/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpbSI6WyJcL2FydHdvcmtcL2ltYWdlRmlsZVwvbWlyYzNiM19jYXJuYXZhbC5qcGciLCJyZXNpemUsNjAwLDYwMCJdfQ.IEWdv6oKHzF8xqVndIMtgikg4syoDGoXd8heKkz1qXU.jpg);
     background-size: cover;
     background-position: center;
