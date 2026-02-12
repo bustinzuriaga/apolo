@@ -1,0 +1,75 @@
+body {
+    background-color: rgb(173, 255, 47);
+    margin: 0;
+}
+
+#menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    list-style: none;
+    padding: 15px;
+    background-color: yellow;
+    position: sticky;
+    top: 0;
+}
+
+#menu a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#titol {
+    background-image: url(multimedia/images/parc-ambiental.jpg);
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-color: rgba(173, 255, 47, 0.4);
+    background-blend-mode: lighten;
+    padding: 50px;
+}
+
+#titol h1 {
+    color: yellow;
+    font-size: 50px;
+}
+
+footer {
+    background-color: yellow;
+}
+
+.info_general {
+    column-count: 2;
+    padding: 50px;
+    font-size: 20px;
+    column-rule: solid black;
+    border-bottom: black solid;
+}
+
+p {
+    text-align: justify;
+    text-align-last: justify;
+}
+
+.info1 {
+    padding-right: 25px;
+    padding-left: 25px;
+}
+
+.info2 {
+    padding-right: 25px;
+    padding-left: 25px;
+}
+
+img {
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+}
+
+.border {
+    border-bottom: black solid;
+}
