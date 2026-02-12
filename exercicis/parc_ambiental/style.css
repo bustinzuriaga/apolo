@@ -73,3 +73,8 @@ h1 {
 .border {
     border-bottom: black solid;
 }
+
+#panorama1, #panorama2 {
+    width: 100%;
+    height: 400px;
+}
