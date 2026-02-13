@@ -50,7 +50,7 @@ footer {
 
 p {
     text-align: justify;
-    text-align-last: justify;
+    text-align-last: center;
 }
 
 .info1 {
@@ -75,7 +75,7 @@ h1 {
     border-bottom: black solid;
 }
 
-#panorama1, #panorama2 {
+#panorama1, #panorama2, #panorama3, #panorama4, #panorama5, #panorama6, #panorama7, #panorama8, #panorama9, #panorama10 {
     width: 100%;
     height: 400px;
 }
