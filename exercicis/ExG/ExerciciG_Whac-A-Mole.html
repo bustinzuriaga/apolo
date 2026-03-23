@@ -19,6 +19,7 @@
 		.grid {
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
 		}
 
 		.topos {
@@ -27,7 +28,7 @@
 			grid-template-areas:
 				"titol . puntuacio"
 				". casillas .";
-			gap: 30px;
+			
             text-align: center;
 		}
 
@@ -49,6 +50,26 @@
             border-radius: 50px;
 		}
 
+        img {
+        cursor: pointer;
+        transition: transform 0.1s, filter 0.2s;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        img:active {
+            transform: scale(0.9);
+        }
+
+        #casillas img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
 	</style>
 
     <div class="topos">
@@ -67,27 +88,31 @@
         <p id="puntuacio">Puntuació: 0</p>
     </div>
 
-
-
 <script>
 
+let puntuacio = 0;
 
-    let puntuacio = 0;
+let topoActualT1 = null;
+let topoActualT2 = null;
+let topoActualT3 = null;
 
-    let topoActualT1 = null;
-    let topoActualT2 = null;
-    let topoActualT3 = null;
+let topoFueraT1 = false;
+let topoFueraT2 = false;
+let topoFueraT3 = false;
 
-    let topoFueraT1 = false;
-    let topoFueraT2 = false;
-    let topoFueraT3 = false;
+// NUEVO: bomba
+let bombaActual = null;
 
-    setInterval(topoSale, 1000);
+setInterval(topoSale, 1000);
 
 function topoSale(){
+
+    // Resetear todo
     for(let i = 1; i <= 9; i++){
         document.getElementById("topo"+i).src = "recursos/topoNo.jpg";
     }
+
+    let casillasOcupadas = [];
 
     // Topo 1
     let aleatoriT1 = Math.floor(Math.random() * 2);
@@ -96,6 +121,7 @@ function topoSale(){
         topoActualT1 = document.getElementById("topo"+casillaT1);
         topoActualT1.src = "recursos/topoSi.jpg";
         topoFueraT1 = true;
+        casillasOcupadas.push(casillaT1);
     } else {
         topoActualT1 = null;
         topoFueraT1 = false;
@@ -108,6 +134,7 @@ function topoSale(){
         topoActualT2 = document.getElementById("topo"+casillaT2);
         topoActualT2.src = "recursos/topoSi.jpg";
         topoFueraT2 = true;
+        casillasOcupadas.push(casillaT2);
     } else {
         topoActualT2 = null;
         topoFueraT2 = false;
@@ -120,30 +147,62 @@ function topoSale(){
         topoActualT3 = document.getElementById("topo"+casillaT3);
         topoActualT3.src = "recursos/topoSi.jpg";
         topoFueraT3 = true;
+        casillasOcupadas.push(casillaT3);
     } else {
         topoActualT3 = null;
         topoFueraT3 = false;
     }
+
+    // -------- BOMBA --------
+    let ponerBomba = Math.floor(Math.random() * 2);
+
+    if (ponerBomba == 1) {
+
+        let casillaBomba;
+
+        // Buscar una casilla libre
+        do {
+            casillaBomba = Math.floor(Math.random() * 9) + 1;
+        } while (casillasOcupadas.includes(casillaBomba));
+
+        bombaActual = document.getElementById("topo"+casillaBomba);
+        bombaActual.src = "recursos/bomba.png";
+
+    } else {
+        bombaActual = null;
+    }
 }
 
-    function golpe(topo){
-        topo.src = "recursos/topoPam.jpg";
-        if ((topo == topoActualT1 && topoFueraT1) || (topo == topoActualT2 && topoFueraT2) || (topo == topoActualT3 && topoFueraT3)) {
-            puntuacio++;
-            document.getElementById("puntuacio").innerHTML = "Puntuació: " + puntuacio;
-            var audio = new Audio('recursos/boing.mp3');
-            audio.play();
-            if (topo == topoActualT1) {
-                topoFueraT1 = false;
-            }
-            if(topo == topoActualT2) {
-                topoFueraT2 = false;
-            }
-            if(topo == topoActualT3) {
-                topoFueraT3 = false;
-            }
-        }
+function golpe(topo){
+
+    // Si es bomba → reset
+    if (topo == bombaActual) {
+        topo.src = "recursos/bomba.png";
+        puntuacio = 0;
+        document.getElementById("puntuacio").innerHTML = "Puntuació: " + puntuacio;
+        var audio = new Audio('recursos/boing.mp3');
+        audio.play();
+        return;
     }
+
+    topo.src = "recursos/topoPam.jpg";
+
+    if ((topo == topoActualT1 && topoFueraT1) || 
+        (topo == topoActualT2 && topoFueraT2) || 
+        (topo == topoActualT3 && topoFueraT3)) {
+        
+        puntuacio++;
+        document.getElementById("puntuacio").innerHTML = "Puntuació: " + puntuacio;
+
+        var audio = new Audio('recursos/boing.mp3');
+        audio.play();
+
+        if (topo == topoActualT1) topoFueraT1 = false;
+        if (topo == topoActualT2) topoFueraT2 = false;
+        if (topo == topoActualT3) topoFueraT3 = false;
+    }
+}
+
 </script>
 
 </body>
