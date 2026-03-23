@@ -107,7 +107,6 @@ setInterval(topoSale, 1000);
 
 function topoSale(){
 
-    // Resetear todo
     for(let i = 1; i <= 9; i++){
         document.getElementById("topo"+i).src = "recursos/topoNo.jpg";
     }
@@ -153,14 +152,13 @@ function topoSale(){
         topoFueraT3 = false;
     }
 
-    // -------- BOMBA --------
+    // Bomba (apareix una bomba, al fer click reseteja la puntuació a 0)
     let ponerBomba = Math.floor(Math.random() * 2);
 
     if (ponerBomba == 1) {
 
         let casillaBomba;
 
-        // Buscar una casilla libre
         do {
             casillaBomba = Math.floor(Math.random() * 9) + 1;
         } while (casillasOcupadas.includes(casillaBomba));
@@ -175,7 +173,6 @@ function topoSale(){
 
 function golpe(topo){
 
-    // Si es bomba → reset
     if (topo == bombaActual) {
         topo.src = "recursos/bomba.png";
         puntuacio = 0;
