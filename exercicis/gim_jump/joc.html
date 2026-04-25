@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gim-Jump</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ml5@0.12.2/dist/ml5.min.js"></script>
+</head>
+<body>
+    <script>
+        let video;
+        let poseNet;
+        let poses = [];
+        let timer = 60; // Temps inicial del comptador
+        let timerRunning = false; // Per controlar si el comptador està en marxa
+        let handsInCircle = false; // Controla si les dues mans estan dins del cercle
+        let score = 0; 
+        let lastScore = 0; // Per guardar la puntuació de la última partida
+        let circles = []; 
+        
+        // Variable per a la musica
+        let audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3');
+
+        // Posició i mida del cercle
+        const circleX = 640;
+        const circleY = 50;
+        const circleRadius = 300; // Cercle més gran
+
+        function setup() {
+            createCanvas(1280, 800); // Mida de la pantalla augmentada
+            video = createCapture(VIDEO);
+            video.size(1280, 800); // Mida del vídeo augmentada
+            video.hide();
+
+            poseNet = ml5.poseNet(video, () => console.log("PoseNet carregat!"));
+            poseNet.on('pose', gotPoses);
+        }
+
+        function gotPoses(results) {
+            poses = results;
+        }
+
+        function draw() {
+            // Apliquem mirall per a que la interacció sigui intuïtiva
+            translate(width, 0);
+            scale(-1, 1);
+            image(video, 0, 0);
+            
+            // Tornem a la normalitat per dibuixar texts i elements
+            scale(-1, 1);
+            translate(-width, 0);
+
+            // Si el comptador no està en marxa, dibuixar el cercle verd
+            if (!timerRunning) {
+                fill(0, 255, 0, 150); // Cercle verd
+                noStroke();
+                ellipse(circleX, circleY, circleRadius * 2);
+                
+                fill(255);
+                textAlign(CENTER, CENTER);
+                textSize(24);
+                text("POSA LES MANS AQUÍ PER COMENÇAR", circleX, circleY);
+
+                // MOSTRAR PUNTUACIÓ TOTAL AL ACABAR
+                if (lastScore > 0) {
+                    textSize(48);
+                    fill(255, 255, 0);
+                    text("PUNTUACIÓ TOTAL: " + lastScore, width / 2, height / 2 + 100);
+                }
+            }
+
+            // Comprovar si les dues mans estan dins del cercle
+            if (poses.length > 0 && !timerRunning) {
+                let pose = poses[0].pose;
+                let leftWrist = pose.keypoints.find(kp => kp.part === 'leftWrist');
+                let rightWrist = pose.keypoints.find(kp => kp.part === 'rightWrist');
+                
+                if (leftWrist && rightWrist) {
+                    let lwX = width - leftWrist.position.x;
+                    let rwX = width - rightWrist.position.x;
+
+                    let leftDist = dist(lwX, leftWrist.position.y, circleX, circleY);
+                    let rightDist = dist(rwX, rightWrist.position.y, circleX, circleY);
+
+                    if (leftDist < circleRadius && rightDist < circleRadius) {
+                        handsInCircle = true;
+                        startTimer(); 
+                    }
+                }
+            }
+
+            // Dibuixar punts vermells per a mans i peus
+            if (poses.length > 0) {
+                let pose = poses[0].pose;
+
+                for (let i = 0; i < pose.keypoints.length; i++) {
+                    let keypoint = pose.keypoints[i];
+                    if (keypoint.score > 0.2 && (keypoint.part.includes('Wrist') || keypoint.part.includes('Ankle'))) {
+                        fill(255, 0, 0); 
+                        noStroke();
+                        ellipse(width - keypoint.position.x, keypoint.position.y, 25, 25); 
+                    }
+                }
+            }
+
+            if (timerRunning) {
+                gestioObjectius();
+
+                fill(255, 0, 0);
+                textSize(64);
+                textAlign(CENTER, CENTER);
+                text(timer, width / 2, 50); 
+                
+                fill(255);
+                textSize(32);
+                text("Punts: " + score, 100, 50);
+
+                if (timer > 0 && frameCount % 60 === 0) {
+                    timer--; 
+                }
+
+                if (timer === 0) {
+                    resetGame();
+                }
+            }
+        }
+
+        // Funció per gestionar els cercles que cauen
+        function gestioObjectius() {
+            if (frameCount % 40 === 0) {
+                circles.push({ x: random(80, width-80), y: -50, v: random(3, 6) });
+            }
+
+            for (let i = circles.length - 1; i >= 0; i--) {
+                let c = circles[i];
+                c.y += c.v;
+
+                fill(255, 255, 0);
+                ellipse(c.x, c.y, 80, 80);
+
+                if (poses.length > 0) {
+                    let pose = poses[0].pose;
+                    pose.keypoints.forEach(kp => {
+                        if (kp.part.includes('Wrist') && kp.score > 0.4) {
+                            let hX = width - kp.position.x;
+                            if (dist(hX, kp.position.y, c.x, c.y) < 80) { 
+                                score++;
+                                circles.splice(i, 1);
+                            }
+                        }
+                    });
+                }
+                
+                if (c.y > height) circles.splice(i, 1);
+            }
+        }
+
+        // Funció per que comenci el comptador
+        function startTimer() {
+            if (!timerRunning) {
+                timerRunning = true;
+                score = 0;
+                circles = [];
+                audio.currentTime = 0; // Reinicia la musica des de l'inici
+                audio.play(); // Inicia la musica
+            }
+        }
+
+        // Funcio per reiniciar el joc
+        function resetGame() {
+            lastScore = score; 
+            timerRunning = false; 
+            timer = 60; 
+            audio.pause(); // Atura la musica quan acaba el temps
+        }
+    </script>
+</body>
+</html>
