@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css">
+    <title>The Simpsons</title>
+</head>
+<body>
+
+        <!-- 
+        Per fer:
+        - Nom -> Apareix un camp de text que permet escriure el Nom i/o cognom del personatge
+        - Gènere -> substitueix el camp de text per dos type="radio", obligant a l'usuari a escollir un dels següents:
+            - Male
+            - Female
+        - Estat -> substitueix el camp de text per dos type="radio", obligant a l'usuari a escollir un dels següents:
+            - Viu
+            - Difunt
+
+        - Mostrar frase random de cada personatge (millorar a: frase diferent cada vegada que carrega la pàgina -> generar número aleatori )
+            - Caldría tindre en compte el següent:
+                - Si el personatge no te frase, mostrar "null"
+                - Si te frase, agafar la longitud de l'array d'aquest personatge i fer un número aleatori de 0 fins a la longitud màxima-1
+        -->
+
+    <h2>Aclariments</h2>
+    <p>La "<a href="https://thesimpsonsapi.com/">The Simpsons API</a>" està dividida en grups de 20 personatges, aquesta pàgina només comptarà amb els primers 20 personatges.<br> Per veure els primers 20 personatges fes click a buscar sense introduïr cap nom. </p>
+    
+    <img id="portada" src="multimedia/the_simpsons_logo.png" alt="The Simpsons" width="25%">
+    
+    <form id="formulariCerca">
+        <label for="opcions">Vols buscar per...</label>
+        <select id="opcions" onchange="decisio()">
+            <option value="nom">Nom</option>
+            <option value="genere">Gènere</option>
+            <option value="estat">Estat</option>
+        </select>
+        <br>
+        <div id="buscar_per">
+            <p id="escriu_el">Escriu el nom (ex: Homer):</p>
+            <div id="div_buscador"><input id="buscador" type="text"></div>
+        </div>
+        <br>
+        <button type="submit">BUSCAR</button>
+    </form>
+
+    <div id="contenidor"></div>
+
+    <script>
+        const formulari = document.getElementById("formulariCerca");
+        const contenidor = document.getElementById("contenidor");
+
+        formulari.addEventListener("submit", (event) => {
+            event.preventDefault();
+            buscar();
+        });
+
+        function decisio() {
+            let opcio = document.getElementById("opcions").value;
+            let escriuEl = document.getElementById("escriu_el");
+            let divBuscador = document.getElementById("div_buscador");
+
+            if (opcio === "nom") {
+                escriuEl.innerHTML = 'Escriu el nom (ex: Homer):';
+                divBuscador.innerHTML = '<input id="buscador" type="text">';
+            } else if (opcio === "genere") {
+                escriuEl.innerHTML = 'Escriu el gènere:';
+                divBuscador.innerHTML = `
+                    <input type="radio" id="male" name="genere" value="Male">
+                    <label for="male">Male</label><br>
+                    <input type="radio" id="female" name="genere" value="Female">
+                    <label for="female">Female</label><br>
+                `;
+            } else if (opcio === "estat") {
+                escriuEl.innerHTML = "Escriu l'estat:";
+                divBuscador.innerHTML = `
+                    <input type="radio" id="viu" name="estat" value="Alive">
+                    <label for="viu">Alive</label><br>
+                    <input type="radio" id="difunt" name="estat" value="Deceased">
+                    <label for="difunt">Deceased</label><br>
+                `;
+            }
+        }
+
+        function buscar() {
+            contenidor.innerHTML = "Carregant...";
+            let opcio = document.getElementById("opcions").value;
+            
+            fetch("https://thesimpsonsapi.com/api/characters")
+                .then((res) => res.json())
+                .then((data) => {
+                    contenidor.innerHTML = "";
+                    const llistaTotal = data.results;
+                    
+                    // Agafem els valors just al moment de buscar
+                    const genereSeleccionat = document.querySelector('input[name="genere"]:checked');
+                    const estatSeleccionat = document.querySelector('input[name="estat"]:checked');
+                    const inputNom = document.getElementById("buscador");
+
+                    const filtrats = llistaTotal.filter(personatge => {
+                        if (opcio === "nom") {
+                            let textCerca = inputNom ? inputNom.value.toLowerCase() : "";
+                            return personatge.name.toLowerCase().includes(textCerca);
+                        } else if (opcio === "genere") {
+                            return genereSeleccionat && personatge.gender === genereSeleccionat.value;
+                        } else if (opcio === "estat") {
+                            return estatSeleccionat && personatge.status === estatSeleccionat.value;
+                        }
+                    });
+
+                    filtrats.forEach((personatge) => {
+                        const divPersonatge = document.createElement("div");
+                        divPersonatge.innerHTML = `
+                        <div class="personatge">
+                            <img class="img_pers" src="https://cdn.thesimpsonsapi.com/500${personatge.portrait_path}" alt="${personatge.name}">
+                            <div class="informacio">
+                                <p class="elements_info" id="nom"><b>Nom:</b> ${personatge.name}</p>
+                                <p class="elements_info"><b>Gènere:</b> ${personatge.gender}</p>
+                                <p class="elements_info"><b>Edat:</b> ${personatge.age}</p>
+                                <p class="elements_info"><b>Ocupació:</b> ${personatge.occupation}</p>
+                                <p class="elements_info"><b>Frase:</b> ${personatge.phrases[0] || "null"}</p>
+                                <p id="status" style="background-color: ${personatge.status === 'Alive' ? 'lightgreen' : 'lightcoral'}">
+                                    <b>Estat:</b> ${personatge.status}
+                                </p>
+                            </div>
+                        </div>
+                        `;
+                        contenidor.appendChild(divPersonatge);
+                    });
+
+                    if (filtrats.length === 0) {
+                        contenidor.innerHTML = "Cap personatge trobat";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    contenidor.innerHTML = "Error al carregar les dades.";
+                });
+        }
+    </script>
+</body>
+</html>
